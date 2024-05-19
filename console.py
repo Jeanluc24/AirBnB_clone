@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/pythoni3
 """Defines AirBnB HBnB console"""
 import cmd
 import re

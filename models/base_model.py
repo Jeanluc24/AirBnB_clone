@@ -1,47 +1,46 @@
 #!/usr/bin/python3
-"""BaseModel class module for AirBnB clone console"""
+"""Defines the BaseModel class."""
 import models
-from uuid import uuid4
 from datetime import datetime
+import uuid
 
 
 class BaseModel:
-    """HBnB BaseModel class for object hierarchy"""
+    """Repsents the BaseModel of the HBnB project."""
 
     def __init__(self, *args, **kwargs):
-        """Initialises a new BaseModel.
-
+        """initializes a base model
         Args:
-            - *args (any): args list (unused)
-            - **kwargs (dict): key-value arg pair attributes dict
+            *args: unused
+            **kwargs: k/v pairs of attributes.
         """
-        time_format = "%Y-%m-%dT%H:%M:%S.%f"
-        self.id = str(uuid4())
-        self.created_at = datetime.today()
-        self.updated_at = datetime.today()
-        if len(kwargs) != 0:
+        self.id = str(uuid.uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
+        isof = "%Y-%m-%dT%H:%M:%S.%f"
+        if kwargs:
             for k, v in kwargs.items():
-                if k == "created_at" or k == "updated_at":
-                    self.__dict__[k] = datetime.strptime(v, time_format)
+                if k.endswith('at') and isinstance(v, str):
+                    self.__dict__[k] = datetime.strptime(v, isof)
                 else:
                     self.__dict__[k] = v
         else:
             models.storage.new(self)
 
     def save(self):
-        """Using updated_at to update current datetime"""
-        self.updated_at = datetime.today()
+        """updates update_at attribute with current time"""
+        self.updated_at = datetime.now()
         models.storage.save()
 
     def to_dict(self):
-        """Returns BaseModel dict key/ value pair"""
-        mydict = self.__dict__.copy()
-        mydict["created_at"] = self.created_at.isoformat()
-        mydict["updated_at"] = self.updated_at.isoformat()
-        mydict["__class__"] = self.__class__.__name__
-        return mydict
+        """returns a dictionary containing all
+        keys/values of __dict__ of the instance"""
+        myi_dict = self.__dict__.copy()
+        myi_dict["created_at"] = self.created_at.isoformat()
+        myi_dict["updated_at"] = self.updated_at.isoformat()
+        myi_dict['__class__'] = self.__class__.__name__
+        return (myi_dict)
 
     def __str__(self):
-        """Returns BaseModel instance as string"""
-        clname = self.__class__.__name__
-        return f"[{clname}] ({self.id}) {self.__dict__}"
+        """prints Base_model instances"""
+        return (f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}")
