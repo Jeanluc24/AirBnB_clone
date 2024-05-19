@@ -50,6 +50,10 @@ class HBNBCommand(cmd.Cmd):
         "Review"
     }
 
+    def do_quit(self, arg):
+        """Quit command to exit the program."""
+        return True
+
     def emptyline(self):
         """Do nothing upon receiving an empty line"""
         pass
@@ -74,10 +78,6 @@ class HBNBCommand(cmd.Cmd):
                     return argdict[command[0]](call)
         print("*** Unknown syntax: {}".format(arg))
         return False
-
-    def do_quit(self, arg):
-        """Quit command to exit the program."""
-        return True
 
     def do_EOF(self, arg):
         """EOF signal to exit the program."""
@@ -147,16 +147,6 @@ class HBNBCommand(cmd.Cmd):
                     objl.append(obj.__str__())
             print(objl)
 
-    def do_count(self, arg):
-        """Usage: count <class> or <class>.count()
-        Retrieve the number of instances of a given class."""
-        argl = parse(arg)
-        count = 0
-        for obj in storage.all().values():
-            if argl[0] == obj.__class__.__name__:
-                count += 1
-        print(count)
-
     def do_update(self, arg):
         """Usage: update <class> <id> <attribute_name> <attribute_value> or
        <class>.update(<id>, <attribute_name>, <attribute_value>) or
@@ -205,6 +195,16 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     obj.__dict__[k] = v
         storage.save()
+
+    def do_count(self, arg):
+        """Usage: count <class> or <class>.count()
+        Retrieve the number of instances of a given class."""
+        argl = parse(arg)
+        count = 0
+        for obj in storage.all().values():
+            if argl[0] == obj.__class__.__name__:
+                count += 1
+        print(count)
 
 
 if __name__ == "__main__":
